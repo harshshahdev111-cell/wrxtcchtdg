@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="980" viewBox="0 0 1000 980" role="img" aria-labelledby="title desc">
+<title id="title">Chat Agent request and approval flow</title><desc id="desc">A chat is loaded, details are checked, missing information is requested, and the user approves a proposal before a verified provider action.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#2563a3"/></marker></defs>
+<rect width="1000" height="980" fill="#ffffff"/>
+<g font-family="Arial, sans-serif" font-size="18" text-anchor="middle" fill="#172b42">
+<rect x="250" y="20" width="700" height="75" rx="12" fill="#edf5ff" stroke="#8ab3df"/>
+<text x="600" y="48" font-weight="bold">User sends a message</text><text x="600" y="75" font-size="16">Browser passes the same chat ID</text>
+<rect x="250" y="120" width="700" height="75" rx="12" fill="#edf5ff" stroke="#8ab3df"/>
+<text x="600" y="148" font-weight="bold">Load the saved conversation</text><text x="600" y="175" font-size="16">Current facts + explicit preferences</text>
+<rect x="250" y="220" width="700" height="75" rx="12" fill="#edf5ff" stroke="#8ab3df"/>
+<text x="600" y="248" font-weight="bold">Build bounded context; AI extracts details</text><text x="600" y="275" font-size="16">Python validates and merges corrections</text>
+<rect x="250" y="445" width="700" height="75" rx="12" fill="#edf5ff" stroke="#8ab3df"/>
+<text x="600" y="473" font-weight="bold">Prepare the exact action proposal</text><text x="600" y="500" font-size="16">Book: search + hold; change: check existing booking</text>
+<rect x="250" y="545" width="700" height="75" rx="12" fill="#edf5ff" stroke="#8ab3df"/>
+<text x="600" y="573" font-weight="bold">User explicitly confirms the proposal</text><text x="600" y="600" font-size="16">Proposal ID + fingerprint + confirmation</text>
+<rect x="250" y="645" width="700" height="75" rx="12" fill="#edf5ff" stroke="#8ab3df"/>
+<text x="600" y="673" font-weight="bold">Validate provider, slot and price</text><text x="600" y="700" font-size="16">Claim execution; reject changed approval</text>
+<rect x="250" y="745" width="700" height="75" rx="12" fill="#edf5ff" stroke="#8ab3df"/>
+<text x="600" y="773" font-weight="bold">Reconcile first; call the approved tool if safe</text><text x="600" y="800" font-size="16">Reuse the proposal ID as the retry key</text>
+<rect x="250" y="845" width="700" height="75" rx="12" fill="#edf5ff" stroke="#8ab3df"/>
+<text x="600" y="873" font-weight="bold">Verify the authoritative result</text><text x="600" y="900" font-size="16">Complete, explain failure, or keep outcome unresolved</text>
+<polygon points="600,320 950,365 600,410 250,365" fill="#fff5df" stroke="#d8aa43"/><text x="600" y="371" font-weight="bold">Are required details complete?</text>
+<rect x="10" y="325" width="205" height="80" rx="10" fill="#fff5df" stroke="#d8aa43"/><text x="112" y="357">Ask only for</text><text x="112" y="382">missing details</text>
+<path d="M600 95 V116" stroke="#2563a3" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M600 195 V216" stroke="#2563a3" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M600 295 V316" stroke="#2563a3" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M600 410 V441" stroke="#2563a3" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M600 520 V541" stroke="#2563a3" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M600 620 V641" stroke="#2563a3" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M600 720 V741" stroke="#2563a3" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<path d="M600 820 V841" stroke="#2563a3" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="630" y="433" font-size="15">Yes</text><text x="233" y="350" font-size="15">No</text><path d="M250 365 H219" stroke="#2563a3" stroke-width="2" marker-end="url(#arrow)"/><path d="M112 325 V57 H245" stroke="#2563a3" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+<text x="500" y="960" font-size="16">Each run saves traces. Unknown booking outcome? Check the same confirmation again.</text></g></svg>

@@ -1,0 +1,29 @@
+# Secrets; keep the shareable environment template
+.env
+.env.*
+!.env.example
+
+# Local Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# Generated docs, static files, previews and recordings
+/site/
+/backend/staticfiles/
+/tmp/
+/artifacts/
+
+# Local database files, scheduler state and logs
+*.sqlite3
+*.sqlite3-*
+celerybeat-schedule*
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db

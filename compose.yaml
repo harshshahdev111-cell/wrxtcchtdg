@@ -1,0 +1,98 @@
+name: chat-agent
+
+services:
+  backend:
+    build: .
+    command:
+      - sh
+      - -c
+      - python manage.py migrate --noinput && exec gunicorn --config config/gunicorn.py config.asgi:application
+    ports:
+      - "127.0.0.1:${BACKEND_PORT:-8001}:8000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+      TZ: Asia/Kolkata
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: ${POSTGRES_DB:-chat_agent}
+      POSTGRES_USER: ${POSTGRES_USER:-chat_agent}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-chat-agent-local-only}
+      DJANGO_SETTINGS_MODULE: config.settings.production
+    depends_on:
+      postgres:
+        condition: service_healthy
+    init: true
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health/', timeout=3).read()",
+        ]
+      interval: 10s
+      timeout: 5s
+      start_period: 20s
+      retries: 5
+
+  worker:
+    build: .
+    command: ["celery", "-A", "config.celery:app", "worker", "--loglevel=info", "--concurrency=2"]
+    env_file:
+      - path: .env
+        required: false
+    environment: &worker_environment
+      DJANGO_SETTINGS_MODULE: config.settings.production
+      TZ: Asia/Kolkata
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: ${POSTGRES_DB:-chat_agent}
+      POSTGRES_USER: ${POSTGRES_USER:-chat_agent}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-chat-agent-local-only}
+      CELERY_BROKER_URL: redis://redis:6379/0
+    depends_on:
+      backend:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    init: true
+
+  beat:
+    build: .
+    command: ["celery", "-A", "config.celery:app", "beat", "--loglevel=info", "--schedule=/tmp/celerybeat-schedule"]
+    environment: *worker_environment
+    depends_on:
+      worker:
+        condition: service_started
+    init: true
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      TZ: Asia/Kolkata
+      POSTGRES_DB: ${POSTGRES_DB:-chat_agent}
+      POSTGRES_USER: ${POSTGRES_USER:-chat_agent}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-chat-agent-local-only}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5440}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  postgres_data:

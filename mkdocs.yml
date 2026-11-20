@@ -1,0 +1,23 @@
+site_name: Chat Agent
+site_description: Simple setup, design and assignment evidence for Chat Agent.
+dev_addr: 127.0.0.1:8002
+theme:
+  name: readthedocs
+  highlightjs: false
+plugins:
+  - search
+markdown_extensions:
+  - tables
+  - fenced_code
+  - admonition
+nav:
+  - Start here: index.md
+  - Run the project: setup.md
+  - Understand the code: developer-guide.md
+  - Agent flow: agent-flow.md
+  - Required submission:
+      - One-page design note: design-note.md
+      - Three bugs and fixes: bugs.md
+      - Generated evaluations: eval-results.md
+      - Timeout trace explained: timeout-trace.md
+      - Agent collaboration transcript: transcript.md

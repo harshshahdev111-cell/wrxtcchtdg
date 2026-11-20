@@ -1,0 +1,147 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chat Agent</title>
+    <link rel="stylesheet" href="{% static 'chat_agent/demo.css' %}" />
+    <script src="{% static 'chat_agent/demo.js' %}" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Chat Agent home">
+        <span class="brand-icon" aria-hidden="true"
+          ><svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M6 5h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-5 3v-3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M8 10h8M8 13h5"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+            /></svg
+        ></span>
+        Chat Agent
+      </a>
+      <div class="header-actions">
+        <span id="mode" class="badge">Connecting…</span>
+        <button
+          id="toggle-trace"
+          class="secondary"
+          aria-controls="trace-panel"
+          aria-expanded="false"
+        >
+          Show activity
+        </button>
+        <button id="start" class="secondary">New chat</button>
+      </div>
+    </header>
+    <main>
+      <div id="workspace" class="workspace">
+        <section class="panel chat-panel" aria-label="Agent chat">
+          <div class="panel-title">
+            <h2>Your conversation</h2>
+            <span id="state" class="badge">Ready</span>
+          </div>
+          <div id="messages" class="messages" aria-live="polite">
+            <div class="welcome">
+              <div class="welcome-symbol" aria-hidden="true">✦</div>
+              <p class="eyebrow">A LITTLE HELP AROUND HOME</p>
+              <h1>What can I help you arrange?</h1>
+              <p>
+                Find a provider, pick a time, and review the details.<br />You
+                stay in control of every booking.
+              </p>
+              <div class="suggestions" aria-label="Example requests">
+                <button
+                  type="button"
+                  class="suggestion"
+                  data-message="Find a plumber in Indiranagar this Saturday morning, under INR 1500."
+                >
+                  Find a plumber
+                </button>
+                <button
+                  type="button"
+                  class="suggestion"
+                  data-message="Find AC servicing in Indiranagar this Saturday morning, under INR 2000."
+                >
+                  Service my AC
+                </button>
+                <button
+                  type="button"
+                  class="suggestion"
+                  data-message="Find an electrician in Indiranagar tomorrow morning, under INR 1500."
+                >
+                  Book an electrician
+                </button>
+              </div>
+              <span class="hint">Or tell me what you need below.</span>
+            </div>
+          </div>
+          <div id="proposal" class="proposal" hidden></div>
+          <form id="composer">
+            <label class="sr-only" for="message">Your message</label>
+            <textarea
+              id="message"
+              rows="2"
+              placeholder="Tell me what you need…"
+              required
+            ></textarea>
+            <button id="send" type="submit">Send</button>
+          </form>
+          <div id="notice" class="notice" role="status">
+            Services are simulated. You approve the final details before any
+            action.
+          </div>
+        </section>
+        <section
+          id="trace-panel"
+          class="panel trace-panel"
+          aria-label="Execution trace"
+          hidden
+        >
+          <div class="panel-title">
+            <h2>Activity</h2>
+            <span id="event-count" class="trace-count">0 events</span>
+          </div>
+          <div class="trace-summary">
+            <span>Saved activity</span
+            ><span id="booking-count">0 verified bookings</span>
+          </div>
+          <div id="trace" class="trace" aria-live="polite">
+            <div class="empty-trace">
+              See how your request is handled, step by step.
+            </div>
+          </div>
+          <div class="trace-footer">
+            <span id="session-id">No conversation yet</span
+            ><a
+              id="raw-trace"
+              href="/api/v1/conversations/"
+              target="_blank"
+              rel="noopener"
+              >View full trace</a
+            >
+          </div>
+          <details class="demo-settings">
+            <summary>Simulation settings</summary>
+            <label for="scenario">Provider response</label
+            ><select id="scenario">
+              <option value="success">Normal booking</option>
+              <option value="timeout_success">Timeout after success</option>
+              <option value="price_change">Price change</option>
+              <option value="slot_taken">Slot taken</option>
+            </select>
+            <p>Applies when you start a new chat.</p>
+          </details>
+        </section>
+      </div>
+    </main>
+    <footer class="page-footer"></footer>
+  </body>
+</html>

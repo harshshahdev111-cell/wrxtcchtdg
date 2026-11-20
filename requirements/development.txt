@@ -1,0 +1,6 @@
+-r base.txt
+ruff>=0.11,<1
+black>=26,<27
+mkdocs>=1.6,<2
+reportlab>=4.4,<5
+pypdf>=6,<7

@@ -1,0 +1,17 @@
+.git
+.venv
+.env
+.env.*
+!.env.example
+**/__pycache__
+**/*.py[cod]
+**/*.sqlite3*
+.ruff_cache
+.pytest_cache
+.mypy_cache
+docs
+site
+tmp
+artifacts
+**/node_modules
+backend/staticfiles

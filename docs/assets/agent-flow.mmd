@@ -1,0 +1,45 @@
+flowchart TD
+    A[User sends a message with chat ID] --> B[Save message and load current facts]
+    B --> C{Approved action still unresolved?}
+    C -- Yes --> R[Ask user to retry the same confirmation]
+    C -- No --> D[Build context from current facts and explicit preferences]
+    D --> E{Input fits token budget?}
+    E -- No --> F[Drop optional preferences or ask for shorter message]
+    E -- Yes --> G[AI extracts new request details]
+    G --> H[Validate and merge corrections]
+    H --> I{Required details complete?}
+    I -- No --> J[Ask for missing details]
+    J --> A
+    I -- Yes --> K{Action?}
+    K -- Book --> L[Find providers within budget and time window]
+    L --> M[Hold a slot and check final price]
+    K -- Cancel or reschedule --> N[Check existing booking and ownership]
+    M --> O[Save exact proposal and request approval]
+    N --> O
+    O --> P[User explicitly confirms proposal ID and fingerprint]
+    P --> Q[Validate details and claim execution under row lock]
+    Q --> S{Already completed?}
+    S -- Yes --> T[Return saved result]
+    S -- No --> U{Booking action?}
+    U -- Yes --> V[Check provider status before booking]
+    V --> W{Booking already exists?}
+    W -- Yes --> X[Verify saved booking identity]
+    W -- No --> Y[Book with the same durable retry key]
+    Y --> Z[Check authoritative provider status]
+    Z --> X
+    U -- Cancel or reschedule --> AA[Execute approved change with retry key]
+    X --> AB{Outcome verified?}
+    AA --> AB
+    AB -- Yes --> AC[Save result and show completion]
+    AB -- Unknown --> R
+    AB -- Known failure --> AD[Explain failure and request a fresh proposal]
+
+
+flowchart LR
+    A[Sync Django request] --> B[25-second cooperative agent budget]
+    B --> C[AI HTTP call: connect up to 5 seconds and read up to 20 seconds]
+    C --> D{Request stuck?}
+    D -- No --> E[Return result or clear timeout reply]
+    D -- Yes --> F[Gunicorn restarts the stuck sync worker around 30 seconds]
+    F --> G[Browser keeps chat and shows retry guidance]
+    G --> H[Retry same confirmation to reconcile uncertain booking]
